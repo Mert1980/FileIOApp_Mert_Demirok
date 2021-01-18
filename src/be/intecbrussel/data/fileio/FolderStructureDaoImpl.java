@@ -89,15 +89,20 @@ public class FolderStructureDaoImpl implements FolderStructureDao {
 
     private void copyFileIntoDirectory(Path path, String name){
         if(path.getFileName().toString().contains(name)){
-            Path p1 = Paths.get("resources");
-            Path p2 = p1.resolve("sorted_folder");
-            Path p3 = p2.resolve(name);
-            Path copyDestination = p3.resolve(path.getFileName());
-            try {
-                Files.copy(path, copyDestination, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Path p1 = Paths.get("resources/sorted_folder");
+            Path p2 = p1.resolve(name);
+            Path copyDestination = p2.resolve(path.getFileName());
+            copy(path, copyDestination);
+        } else if (path.getFileName().toString().contains("sqlite3")){
+            copy(path, Path.of("resources/sorted_folder/database/mov_db.sqlite3"));
+        }
+    }
+
+    private void copy(Path path, Path copyDestination) {
+        try {
+            Files.copy(path, copyDestination, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
