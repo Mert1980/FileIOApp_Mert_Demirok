@@ -19,9 +19,10 @@ public class FolderStructureDaoImpl implements FolderStructureDao {
 
             // set directory names
             Files.walk(pathToWalk).forEach(path -> {
-                if(path.getFileName().toFile().isHidden()){
-                    System.out.println(path.getFileName());
+                if(path.toFile().isHidden()){
+                    System.out.println(path);
                 }
+                //System.out.println(path.getFileName());
                 setDirectoryName(path);
             });
 
@@ -63,11 +64,11 @@ public class FolderStructureDaoImpl implements FolderStructureDao {
         int index = fullName.lastIndexOf(".");
 
         if (index != -1) {
-            fullName = fullName.substring(index + 1);
-            if(fullName.equalsIgnoreCase("sqlite3")){
+            String extension = fullName.substring(index + 1);
+            if(extension.equalsIgnoreCase("sqlite3")){
                 folderNameSet.add("database");
             } else {
-                folderNameSet.add(fullName);
+                folderNameSet.add(extension);
             }
         }
     }
@@ -85,12 +86,13 @@ public class FolderStructureDaoImpl implements FolderStructureDao {
     private void copyFiles(Path path) {
         folderNameSet.forEach(name -> copyFileIntoDirectory(path, name));
     }
+
     private void copyFileIntoDirectory(Path path, String name){
         if(path.getFileName().toString().contains(name)){
-            System.out.println("1: " + name);
-            Path p1 = Paths.get("/resources");
+            Path p1 = Paths.get("resources");
             Path p2 = p1.resolve("sorted_folder");
-            Path copyDestination = p2.resolve(name);
+            Path p3 = p2.resolve(name);
+            Path copyDestination = p3.resolve(path.getFileName());
             try {
                 Files.copy(path, copyDestination, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
