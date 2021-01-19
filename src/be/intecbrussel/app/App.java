@@ -8,6 +8,7 @@ public class App {
         FolderStructureDao folderStructureDao = new FolderStructureDaoImpl();
 
         folderStructureDao.sortFolder();
+        folderStructureDao.summarizeFolder();
 
     }
 }
